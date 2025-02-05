@@ -1,34 +1,42 @@
 import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
-import { AuthProvider, useAuth } from "./app/context/AuthContext";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Home from "./app/screens/Home";
-import Login from "./app/screens/Login";
-
-const Stack = createNativeStackNavigator();
+import { View, Text, StyleSheet } from "react-native";
+import AutoHeightWebView from "react-native-autoheight-webview";
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Layout></Layout>
-    </AuthProvider>
+    <View style={styles.container}>
+      {/* Navbar */}
+      <View style={styles.navbar}>
+      </View>
+
+      {/* WebView debajo de la navbar */}
+      <View style={styles.webViewContainer}>
+        <AutoHeightWebView
+          source={{ uri: "https://instalaciones.eternet.cc" }}
+          style={{ width: "100%" }}
+        />
+      </View>
+    </View>
   );
 }
 
-export const Layout = () => {
-
-  const {authState, onLogout} = useAuth()
-
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-      {authState?.authenticated ? (
-        <Stack.Screen name="Home" component={Home} options={{headerRight: () => <Button onPress={onLogout} title="Sign out"/>,}}></Stack.Screen>
-      ): (
-        <Stack.Screen name="Login" component={Login}></Stack.Screen>
-      )}
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  navbar: {
+    height: 40, // Ajusta la altura de la navbar
+    backgroundColor: "#111",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "white"
+  },
+  navbarText: {
+    color: "white",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  webViewContainer: {
+    flex: 1, // Ocupa el espacio restante debajo de la navbar
+  },
+});

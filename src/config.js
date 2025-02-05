@@ -1,14 +1,22 @@
-const { createPool } = require("mysql2/promise");
+// -- Librerías 
+import { createPool } from "mysql2/promise";
+import { config } from "dotenv";
 
-// Configura la conexión a MySQL
-const pool = createPool({
-    host: 'localhost', // Tu host
-    user: 'root',      // Tu usuario de MySQL
-    password: '',      // Tu contraseña de MySQL
-    database: 'simple_login' // Tu base de datos
-});
+config();
 
-console.log("DB is Connected....[OK]");
+// -- creamos la base de datos
+export const database = {
+  host: process.env.DATABASE_HOST || "localhost",
+  user: process.env.DATABASE_USER || "root",
+  password: process.env.DATABASE_PASSWORD || "",
+  database: process.env.DATABASE_NAME || "simple_login",
+  port: process.env.DATABASE_PORT || 3306,
+};
 
-// Exporta el pool para que se pueda usar en otros archivos
-module.exports = { pool };
+// -- Clave secreta
+export const SECRET = process.env.SECRET || 'some secret key';
+
+
+// -- conexión a base de datos
+export const pool = createPool(database);
+console.log("Connected to DB................[OK]")
